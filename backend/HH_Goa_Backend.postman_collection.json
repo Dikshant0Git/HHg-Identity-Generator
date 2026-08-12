@@ -1,0 +1,162 @@
+{
+  "info": {
+    "_postman_id": "hhgoa-builder-id-backend-v1",
+    "name": "HH Goa 2026 — Builder ID Generator API",
+    "description": "Postman API Collection for HH Goa 2026 Builder ID Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "health"]
+        },
+        "description": "Verifies that the backend server is running and healthy."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Create Participant",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"aryan.sharma@example.com\",\n  \"name\": \"Aryan Sharma\",\n  \"photoUrl\": \"https://images.unsplash.com/photo-1534528741775-53994a69daeb\",\n  \"stack\": [\"AI\", \"React\", \"Node.js\", \"Python\"],\n  \"social\": {\n    \"xHandle\": \"@aryan_sharma\",\n    \"github\": \"aryan-sharma\",\n    \"linkedin\": \"aryan-sharma-goa\",\n    \"bio\": \"Building AI apps for HH Goa 2026 hackathon!\"\n  }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/participants",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "participants"]
+        },
+        "description": "Creates a new participant, issues public ID (HH26-XXXXXX), and assigns deterministic Builder Class."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Re-Submit Duplicate Email (Idempotency Test)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"aryan.sharma@example.com\",\n  \"name\": \"Aryan Sharma\",\n  \"photoUrl\": \"https://images.unsplash.com/photo-1534528741775-53994a69daeb\",\n  \"stack\": [\"AI\", \"React\", \"Node.js\"],\n  \"social\": {\n    \"xHandle\": \"@aryan_sharma\"\n  }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/participants",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "participants"]
+        },
+        "description": "Re-submitting the same email address returns the existing participant with created: false."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Preview Builder Class",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"stack\": [\"React\", \"Tailwind\", \"Vite\", \"Figma\"]\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/builder-class/preview",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "builder-class", "preview"]
+        },
+        "description": "Previews the deterministic Builder Class before submittting participant creation."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get Public Profile (QR Verification)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/profiles/HH26-XXXXXX",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "profiles", "HH26-XXXXXX"]
+        },
+        "description": "Public verification profile endpoint. Replace HH26-XXXXXX with your generated Public ID."
+      },
+      "response": []
+    },
+    {
+      "name": "6. Validation Error Test (Invalid Payload)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"not-an-email\",\n  \"name\": \"\",\n  \"photoUrl\": \"invalid-url\",\n  \"stack\": []\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/api/participants",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "participants"]
+        },
+        "description": "Tests validation middleware. Expected output: HTTP 400 VALIDATION_ERROR."
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Non-Existent Profile (404 Test)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/api/profiles/HH26-999999",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "profiles", "HH26-999999"]
+        },
+        "description": "Tests non-existent profile lookup. Expected output: HTTP 404 PARTICIPANT_NOT_FOUND."
+      },
+      "response": []
+    }
+  ]
+}

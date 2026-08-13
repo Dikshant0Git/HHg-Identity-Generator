@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import { config } from "./config/env.js";
 import participantRoutes from "./routes/participant.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
@@ -26,6 +27,9 @@ app.use(
 // Body parsing middleware
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ limit: "1mb", extended: true }));
+
+// Cookie parsing (required for X OAuth session cookies)
+app.use(cookieParser());
 
 // Health Endpoint
 app.get("/api/health", (req, res) => {

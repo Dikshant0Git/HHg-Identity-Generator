@@ -30,12 +30,24 @@ export const createParticipantSchema = z.object({
       z.string().transform((val) => val.split(",").map((s) => s.trim())),
     ]),
 
-  social: z
-    .object({
-      xHandle: z.string().trim().max(50, { message: "xHandle cannot exceed 50 characters" }).optional(),
-      github: z.string().trim().max(150, { message: "GitHub handle cannot exceed 150 characters" }).optional(),
-      linkedin: z.string().trim().max(150, { message: "LinkedIn handle cannot exceed 150 characters" }).optional(),
-      bio: z.string().trim().max(280, { message: "Bio cannot exceed 280 characters" }).optional(),
-    })
-    .optional(),
+  social: z.preprocess(
+    (val) => {
+      if (typeof val === "string") {
+        try {
+          return JSON.parse(val);
+        } catch (e) {
+          return val;
+        }
+      }
+      return val;
+    },
+    z
+      .object({
+        xHandle: z.string().trim().max(50, { message: "xHandle cannot exceed 50 characters" }).optional(),
+        github: z.string().trim().max(150, { message: "GitHub handle cannot exceed 150 characters" }).optional(),
+        linkedin: z.string().trim().max(150, { message: "LinkedIn handle cannot exceed 150 characters" }).optional(),
+        bio: z.string().trim().max(280, { message: "Bio cannot exceed 280 characters" }).optional(),
+      })
+      .optional()
+  ),
 });

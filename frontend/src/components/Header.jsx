@@ -15,8 +15,11 @@ export default function Header() {
   return (
     <header
       id="hh-header"
-      className="w-full py-3 px-6 md:px-12 flex items-center justify-between relative z-50 shrink-0"
-      style={{ backgroundColor: 'var(--color-goa-green-deep)' }}
+      className={`w-full py-3 px-6 md:px-12 flex items-center justify-between shrink-0 transition-all duration-300 ${
+        location.pathname === '/' 
+          ? 'fixed top-0 left-0 right-0 z-[100] bg-black/20 backdrop-blur-md border-b border-white/10' 
+          : 'relative z-50 bg-[var(--color-goa-green-deep)]'
+      }`}
     >
       {/* Logo */}
       <Link to="/" className="flex items-center gap-2 no-underline" id="hh-logo-link">
@@ -57,13 +60,7 @@ export default function Header() {
 
       {/* Header CTA Buttons */}
       <div className="flex items-center gap-3">
-        <Link
-          to="/create"
-          className="hidden sm:inline-flex items-center px-4 py-2 rounded-full border border-[var(--color-sun-gold)] text-[var(--color-sun-gold)] font-mono text-xs font-bold uppercase tracking-wider hover:bg-[var(--color-sun-gold)]/10 transition-all"
-          id="hh-how-it-works-button"
-        >
-          HOW IT WORKS
-        </Link>
+      
         <Link
           to="/create"
           className="inline-flex items-center px-5 py-2 rounded-full bg-[var(--color-hh-pink)] text-white font-mono text-xs font-bold uppercase tracking-wider hover:bg-[var(--color-hh-pink-hot)] shadow-md transition-all"

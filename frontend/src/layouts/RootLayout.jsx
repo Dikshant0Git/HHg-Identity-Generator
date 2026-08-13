@@ -13,13 +13,13 @@ export default function RootLayout() {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--color-goa-green-deep)]">
+    <div className="min-h-screen flex flex-col bg-[var(--color-goa-green-deep)] relative">
       <CoconutCursor />
       <Header />
-      <main className="flex-1">
+      <main className="flex-1 w-full h-full flex flex-col">
         <Outlet />
       </main>
-      <Footer />
+      {location.pathname !== '/' && <Footer />}
     </div>
   );
 }

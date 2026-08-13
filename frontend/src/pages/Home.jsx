@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Download, Eye } from 'lucide-react';
 import { usePageReveal } from '../hooks/useGsapAnimations';
 import mainHomeBg from '../assets/main-home-background.png';
+import mobileBackground from '../assets/mobile-background.png';
 import imgHackerHouse from '../assets/imgi_3_Hacker house.png';
 import imgGoaHindi from '../assets/imgi_4_goa_hindi.png';
 
@@ -13,11 +14,12 @@ export default function Home() {
   return (
     <div 
       ref={pageRef} 
-      className="w-full flex-1 flex flex-col justify-between overflow-hidden relative bg-cover bg-center bg-no-repeat min-h-[calc(100vh-64px)]"
-      style={{ backgroundImage: `url(${mainHomeBg})` }}
+      className="w-full h-screen flex flex-col justify-between overflow-hidden relative"
     >
+      <img src={mainHomeBg} alt="Background" className="absolute inset-0 w-full h-full object-fill z-0 hidden lg:block" />
+      <img src={mobileBackground} alt="Background Mobile" className="absolute inset-0 w-full h-full object-fill z-0 block lg:hidden" />
       {/* Main Hero Container — Single desktop page layout */}
-      <div className="max-w-7xl mx-auto w-full px-6 md:px-12 flex-1 flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10 py-6 lg:py-10">
+      <div className="max-w-7xl mx-auto w-full px-6 md:px-12 flex-1 flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-6 relative z-10 pt-24 pb-6 lg:py-10 lg:pt-28">
         
         {/* Left Side: Content & Typography */}
         <div className="flex-1 max-w-2xl flex flex-col justify-center z-20 pb-16 lg:pb-24">
@@ -58,8 +60,8 @@ export default function Home() {
           {/* Tagline & Copy */}
           <div className="mb-6">
             <h2 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-[var(--color-cream)] tracking-wide uppercase leading-tight mb-2">
-              ONE PHOTO. ONE FRAME.<br />
-              YOUR IDENTITY.
+              Your Frame. Your Vibe. <br />
+              Your Mark.
             </h2>
             <p className="font-body text-[var(--color-sand-dark)] text-sm sm:text-base max-w-lg leading-relaxed">
               Create your official HH Goa 2026 Builder ID in seconds and join the builder&apos;s tribe.
@@ -75,15 +77,6 @@ export default function Home() {
             >
               <span>START CREATING</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
-            </Link>
-            
-            <Link 
-              to="/create" 
-              className="px-6 py-3.5 rounded-full bg-black/40 backdrop-blur-sm border border-[var(--color-sun-gold)] text-[var(--color-sun-gold)] font-mono text-xs sm:text-sm font-bold uppercase tracking-wider hover:bg-[var(--color-sun-gold)]/10 transition-all flex items-center gap-2"
-              id="home-instant-preview"
-            >
-              <Eye size={16} />
-              <span>INSTANT PREVIEW</span>
             </Link>
           </div>
 

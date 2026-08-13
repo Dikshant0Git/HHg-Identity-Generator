@@ -9,6 +9,7 @@
     "test": "node tests/x-share.test.js && node tests/integration-x.test.js && node tests/imagekit.test.js && node tests/full-system.test.js"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

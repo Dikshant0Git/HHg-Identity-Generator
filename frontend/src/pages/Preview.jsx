@@ -1,12 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Download, RefreshCcw, Loader2 } from 'lucide-react';
+import { Download, RefreshCcw, Loader2, Check } from 'lucide-react';
 import QRCode from 'react-qr-code';
-import html2canvas from 'html2canvas';
+import * as htmlToImage from 'html-to-image';
 import { usePageReveal } from '../hooks/useGsapAnimations';
 import { fetchPublicProfile } from '../features/participantSlice';
 import { BUILDER_CLASSES } from '../utils/constants';
+import { getXAuthUrl, shareCardToX } from '../services/api';
 import hhLogo from '../assets/hh-logo.png';
 import homeHeroArt from '../assets/home-hero-art.png';
 
@@ -19,6 +20,27 @@ export default function Preview() {
 
   const { profileData, profileLoading, profileError, formData, uploadedPhoto } = useSelector((state) => state.participant);
   const [downloading, setDownloading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [xAuthed, setXAuthed] = useState(false);
+  const [xSharing, setXSharing] = useState(false);
+  const [xShared, setXShared] = useState(false);
+  const [xError, setXError] = useState(null);
+
+  // Detect X OAuth callback params on mount
+  useEffect(() => {
+    const xAuth = searchParams.get('x_auth');
+    const xErr = searchParams.get('x_error');
+    if (xAuth === 'success') {
+      setXAuthed(true);
+      searchParams.delete('x_auth');
+      setSearchParams(searchParams, { replace: true });
+    }
+    if (xErr) {
+      setXError(`X authentication failed: ${xErr}`);
+      searchParams.delete('x_error');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, []);
 
   // Decide whether to use Redux formData (if just created) or fetched profileData
   const isNewlyCreated = formData?.name && uploadedPhoto?.preview && publicId;
@@ -34,13 +56,11 @@ export default function Preview() {
     setDownloading(true);
     
     try {
-      const canvas = await html2canvas(cardRef.current, {
-        scale: 2, // High resolution
-        useCORS: true,
-        backgroundColor: null,
+      const image = await htmlToImage.toPng(cardRef.current, {
+        pixelRatio: 2, // High resolution
+        backgroundColor: '#FFFFFF',
       });
       
-      const image = canvas.toDataURL('image/png');
       const link = document.createElement('a');
       link.href = image;
       link.download = `HH_Goa_2026_${publicId}.png`;
@@ -53,10 +73,41 @@ export default function Preview() {
     }
   };
 
-  const handleShare = () => {
-    const text = encodeURIComponent(`Just forged my HH Goa 2026 Builder ID 🌴\n\n#FrameInGoa\n`);
-    const url = encodeURIComponent(`${window.location.origin}/id/${publicId}`);
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+  const handleShareToX = async () => {
+    if (!cardRef.current) return;
+    
+    if (!xAuthed) {
+      try {
+        const response = await getXAuthUrl();
+        if (response?.authUrl) {
+          window.location.href = response.authUrl;
+        }
+      } catch (err) {
+        setXError('Failed to connect to X. Please try again.');
+      }
+      return;
+    }
+
+    setXSharing(true);
+    setXError(null);
+    try {
+      const blob = await htmlToImage.toBlob(cardRef.current, {
+        pixelRatio: 2,
+        backgroundColor: '#FFFFFF',
+      });
+      
+      const response = await shareCardToX(blob);
+      
+      setXShared(true);
+      setXSharing(false);
+      
+      if (response?.postUrl) {
+        window.open(response.postUrl, '_blank');
+      }
+    } catch (err) {
+      setXSharing(false);
+      setXError(err?.message || 'Failed to share to X. Please try again.');
+    }
   };
 
   // Determine data source
@@ -187,12 +238,19 @@ export default function Preview() {
               </button>
               
               <button 
-                onClick={handleShare}
-                className="btn-hh btn-hh-secondary w-full flex items-center justify-center gap-2 bg-black text-white hover:bg-gray-800 border-black"
+                onClick={handleShareToX}
+                disabled={xSharing || xShared}
+                className="btn-hh btn-hh-secondary w-full flex items-center justify-center gap-2 bg-black text-white hover:bg-gray-800 border-black disabled:opacity-50"
               >
-                <svg width="18" height="18" viewBox="0 0 1200 1227" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/></svg>
-                SHARE TO X
+                {xSharing ? (
+                  <><Loader2 size={18} className="animate-spin" /> SHARING...</>
+                ) : xShared ? (
+                  <><Check size={18} /> SHARED!</>
+                ) : (
+                  <><svg width="18" height="18" viewBox="0 0 1200 1227" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/></svg> SHARE TO X</>
+                )}
               </button>
+              {xError && <p className="text-xs text-red-400 font-mono mt-1 text-center">{xError}</p>}
 
               <Link 
                 to="/create" 

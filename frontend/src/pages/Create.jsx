@@ -112,6 +112,13 @@ export default function Create() {
       const dataUrl = await htmlToImage.toPng(idCardRef.current, {
         pixelRatio: 2, // High resolution
         backgroundColor: '#FFFFFF',
+        width: idCardRef.current.offsetWidth,
+        height: idCardRef.current.offsetHeight,
+        style: { 
+          transform: 'scale(1)', 
+          transformOrigin: 'top left',
+          margin: 0
+        }
       });
       const link = document.createElement('a');
       link.download = `HH_Goa_BuilderID_${(formData.name || 'Builder').replace(/\s+/g, '_')}.png`;
@@ -165,6 +172,13 @@ export default function Create() {
       const blob = await htmlToImage.toBlob(idCardRef.current, {
         pixelRatio: 2,
         backgroundColor: '#FFFFFF',
+        width: idCardRef.current.offsetWidth,
+        height: idCardRef.current.offsetHeight,
+        style: { 
+          transform: 'scale(1)', 
+          transformOrigin: 'top left',
+          margin: 0
+        }
       });
       
       const response = await shareCardToX(blob);

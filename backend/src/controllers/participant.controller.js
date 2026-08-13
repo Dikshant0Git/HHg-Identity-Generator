@@ -7,7 +7,7 @@ import { successResponse, errorResponse } from "../utils/apiResponse.js";
  */
 export const createParticipant = async (req, res, next) => {
   try {
-    const result = await createOrGetParticipant(req.body);
+    const result = await createOrGetParticipant(req.body, req.file);
     const statusCode = result.created ? 201 : 200;
     return successResponse(res, result, statusCode);
   } catch (error) {

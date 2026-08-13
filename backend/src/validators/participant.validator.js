@@ -13,24 +13,22 @@ export const createParticipantSchema = z.object({
     .max(80, { message: "Name cannot exceed 80 characters" }),
 
   photoUrl: z
-    .string({ required_error: "Photo URL is required" })
+    .string()
     .url({ message: "Photo URL must be a valid URL" })
     .max(2000, { message: "Photo URL cannot exceed 2000 characters" })
-    .refine((url) => url.startsWith("https://") || url.startsWith("http://"), {
-      message: "Photo URL must be a valid HTTP or HTTPS URL",
-    }),
+    .optional(),
 
   stack: z
-    .array(
-      z
-        .string()
-        .trim()
-        .min(1, { message: "Stack technology cannot be empty" })
-        .max(30, { message: "Stack item cannot exceed 30 characters" }),
-      { required_error: "Stack is required" }
-    )
-    .min(1, { message: "Stack must contain at least 1 technology" })
-    .max(8, { message: "Stack cannot contain more than 8 technologies" }),
+    .union([
+      z.array(
+        z
+          .string()
+          .trim()
+          .min(1, { message: "Stack technology cannot be empty" })
+          .max(30, { message: "Stack item cannot exceed 30 characters" })
+      ),
+      z.string().transform((val) => val.split(",").map((s) => s.trim())),
+    ]),
 
   social: z
     .object({

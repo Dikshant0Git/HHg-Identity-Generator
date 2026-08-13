@@ -37,6 +37,11 @@ const participantSchema = new mongoose.Schema(
       required: true,
     },
 
+    photoFileId: {
+      type: String,
+      default: "",
+    },
+
     stack: {
       type: [String],
       required: true,

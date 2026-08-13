@@ -5,6 +5,7 @@ import { config } from "./config/env.js";
 import participantRoutes from "./routes/participant.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
 import builderClassRoutes from "./routes/builderClass.routes.js";
+import xRoutes from "./routes/x.routes.js";
 import { notFoundHandler, errorHandler } from "./middleware/error.middleware.js";
 
 const app = express();
@@ -17,7 +18,8 @@ app.use(
   cors({
     origin: config.frontendUrl || "*",
     methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Session-Key"],
+    credentials: true,
   })
 );
 
@@ -38,6 +40,7 @@ app.get("/api/health", (req, res) => {
 app.use("/api/participants", participantRoutes);
 app.use("/api/profiles", profileRoutes);
 app.use("/api/builder-class", builderClassRoutes);
+app.use("/api/x", xRoutes);
 
 // Fallback & Error Handling Middleware
 app.use(notFoundHandler);

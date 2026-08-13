@@ -1,1 +1,438 @@
+/* ── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
 @import "tailwindcss";
+
+/* ============================================================
+   HH GOA 2026 — DESIGN SYSTEM
+   Colour palette, typography, spacing, borders, animations.
+   Visual language: retro · editorial · Goa · handcrafted · bold
+   ============================================================ */
+
+/* ── Tailwind v4 Theme Tokens ─────────────────────────────── */
+@theme {
+  /* Colours — from hh-goa-palette.png */
+  --color-goa-green: #0B6623;
+  --color-goa-green-dark: #0A3D1A;
+  --color-goa-green-deep: #072E14;
+  --color-goa-green-muted: #1A5C32;
+  --color-hh-pink: #E8115B;
+  --color-hh-pink-hot: #FF1493;
+  --color-hh-pink-muted: #C9185A;
+  --color-sun-gold: #EAAA00;
+  --color-sun-gold-light: #F5CC4D;
+  --color-sun-gold-muted: #D4990A;
+  --color-sand: #E8D9A0;
+  --color-sand-light: #F2E8C4;
+  --color-sand-dark: #C4B580;
+  --color-dark-green: #0A3D1A;
+  --color-ink-black: #1A1A1A;
+  --color-ink-dark: #111111;
+  --color-cream: #FDF8EC;
+  --color-off-white: #FAF7F0;
+
+  /* Typography — editorial + monospace supporting */
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'Space Mono', 'Courier New', monospace;
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
+
+  /* Spacing scale */
+  --spacing-section: 6rem;
+  --spacing-section-mobile: 3rem;
+
+  /* Border radii — intentionally tight for poster feeling */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-card: 10px;
+
+  /* Shadows — bold, high-contrast */
+  --shadow-brutal: 4px 4px 0px 0px var(--color-ink-black);
+  --shadow-brutal-sm: 2px 2px 0px 0px var(--color-ink-black);
+  --shadow-brutal-pink: 4px 4px 0px 0px var(--color-hh-pink);
+  --shadow-brutal-gold: 4px 4px 0px 0px var(--color-sun-gold);
+
+  /* Animation timing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-page: 600ms;
+
+  /* Responsive breakpoints (Tailwind v4 uses --breakpoint-*) */
+  --breakpoint-xs: 375px;
+  --breakpoint-sm: 390px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1440px;
+}
+
+/* ── Base Reset & Defaults ─────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-goa-green-deep);
+  color: var(--color-cream);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Selection colour */
+::selection {
+  background-color: var(--color-hh-pink);
+  color: white;
+}
+
+/* ── Typography Utilities ──────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Editorial headings */
+.heading-hero {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+
+.heading-section {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.heading-card {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+}
+
+.text-mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+}
+
+.text-mono-small {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+/* ── HH Goa Button Styles ─────────────────────────────────── */
+.btn-hh {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 2.5px solid var(--color-ink-black);
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out-expo),
+              box-shadow var(--duration-fast) var(--ease-out-expo);
+  text-decoration: none;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.btn-hh:active {
+  transform: translate(2px, 2px);
+  box-shadow: none !important;
+}
+
+/* Primary — Gold background */
+.btn-hh-primary {
+  background-color: var(--color-sun-gold);
+  color: var(--color-ink-black);
+  box-shadow: var(--shadow-brutal);
+}
+
+.btn-hh-primary:hover {
+  background-color: var(--color-sun-gold-light);
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px 0px var(--color-ink-black);
+}
+
+/* Secondary — Pink background */
+.btn-hh-secondary {
+  background-color: var(--color-hh-pink);
+  color: white;
+  box-shadow: var(--shadow-brutal);
+}
+
+.btn-hh-secondary:hover {
+  background-color: var(--color-hh-pink-hot);
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px 0px var(--color-ink-black);
+}
+
+/* Outline — transparent with border */
+.btn-hh-outline {
+  background-color: transparent;
+  color: var(--color-cream);
+  border-color: var(--color-cream);
+  box-shadow: var(--shadow-brutal-sm);
+}
+
+.btn-hh-outline:hover {
+  background-color: var(--color-cream);
+  color: var(--color-ink-black);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px 0px var(--color-ink-black);
+}
+
+/* ── Card Styles ───────────────────────────────────────────── */
+.card-hh {
+  background-color: var(--color-goa-green-dark);
+  border: 2.5px solid var(--color-sun-gold-muted);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.card-hh-sand {
+  background-color: var(--color-sand);
+  color: var(--color-ink-black);
+  border: 2.5px solid var(--color-ink-black);
+  box-shadow: var(--shadow-brutal);
+  padding: 1.5rem;
+}
+
+.card-hh-outlined {
+  background-color: transparent;
+  border: 2px solid var(--color-sun-gold-muted);
+  padding: 1.5rem;
+}
+
+/* ── Decorative Borders ────────────────────────────────────── */
+.border-hh {
+  border: 2.5px solid var(--color-sun-gold);
+}
+
+.border-hh-thick {
+  border: 3.5px solid var(--color-sun-gold);
+}
+
+.border-hh-pink {
+  border: 2.5px solid var(--color-hh-pink);
+}
+
+.border-hh-black {
+  border: 2.5px solid var(--color-ink-black);
+}
+
+/* Dashed retro border */
+.border-hh-dashed {
+  border: 2px dashed var(--color-sun-gold-muted);
+}
+
+/* ── Section Wrapper ───────────────────────────────────────── */
+.section-hh {
+  padding-top: var(--spacing-section-mobile);
+  padding-bottom: var(--spacing-section-mobile);
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .section-hh {
+    padding-top: var(--spacing-section);
+    padding-bottom: var(--spacing-section);
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .section-hh {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+/* ── Image Container ───────────────────────────────────────── */
+.img-hh {
+  border: 3px solid var(--color-sun-gold);
+  overflow: hidden;
+}
+
+.img-hh-circle {
+  border: 3px solid var(--color-sun-gold);
+  border-radius: 50%;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+/* ── Badge ─────────────────────────────────────────────────── */
+.badge-hh {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 2px solid currentColor;
+  line-height: 1.4;
+}
+
+.badge-hh-pink {
+  background-color: var(--color-hh-pink);
+  color: white;
+  border-color: var(--color-hh-pink);
+}
+
+.badge-hh-gold {
+  background-color: var(--color-sun-gold);
+  color: var(--color-ink-black);
+  border-color: var(--color-sun-gold);
+}
+
+.badge-hh-green {
+  background-color: var(--color-goa-green);
+  color: var(--color-cream);
+  border-color: var(--color-goa-green);
+}
+
+/* ── Loading States ────────────────────────────────────────── */
+.loader-hh {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid var(--color-sun-gold-muted);
+  border-top-color: var(--color-sun-gold);
+  border-radius: 50%;
+  animation: hh-spin 0.7s linear infinite;
+}
+
+.loader-hh-lg {
+  width: 3rem;
+  height: 3rem;
+  border-width: 4px;
+}
+
+@keyframes hh-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Skeleton loading shimmer */
+.skeleton-hh {
+  background: linear-gradient(
+    90deg,
+    var(--color-goa-green-dark) 25%,
+    var(--color-goa-green-muted) 50%,
+    var(--color-goa-green-dark) 75%
+  );
+  background-size: 200% 100%;
+  animation: hh-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes hh-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Page Transition ───────────────────────────────────────── */
+.page-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--duration-page) var(--ease-out-expo),
+              transform var(--duration-page) var(--ease-out-expo);
+}
+
+/* ── Reduced Motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Scrollbar Styling ─────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-goa-green-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-goa-green-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-sun-gold-muted);
+}
+
+/* ── Focus Styles (Accessibility) ──────────────────────────── */
+:focus-visible {
+  outline: 2.5px solid var(--color-sun-gold);
+  outline-offset: 2px;
+}
+
+/* ── Cursor: hide default on desktop for custom cursor ──── */
+@media (hover: hover) and (pointer: fine) {
+  body.custom-cursor-active {
+    cursor: none;
+  }
+
+  body.custom-cursor-active a,
+  body.custom-cursor-active button,
+  body.custom-cursor-active [role="button"],
+  body.custom-cursor-active input,
+  body.custom-cursor-active textarea,
+  body.custom-cursor-active select,
+  body.custom-cursor-active label {
+    cursor: none;
+  }
+}

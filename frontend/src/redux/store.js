@@ -1,8 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counterSlice';
+import participantReducer from '../features/participantSlice';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    participant: participantReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore file objects in uploadedPhoto
+        ignoredPaths: ['participant.uploadedPhoto.file'],
+        ignoredActions: ['participant/setPhotoPreview'],
+      },
+    }),
 });

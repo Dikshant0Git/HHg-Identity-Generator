@@ -20,8 +20,8 @@ import { shareCardToX, getXAuthUrl } from '../services/api';
 
 import PhotoCropper from '../components/PhotoCropper';
 import LiveIdCard from '../components/LiveIdCard';
-import bgWithoutFooter from '../assets/background-without-footer.png';
-import mobileBackground from '../assets/mobile-background.png';
+import bgWithoutFooter from '../assets/simple-background.png';
+import mobileBackground from '../assets/simple-background.png';
 import idCardThemes from '../assets/id-card-themes.png';
 
 import theme1 from '../assets/theme-1.png';
@@ -241,6 +241,7 @@ export default function Create() {
           placeholder="Type and press Enter (e.g. React, Python)"
           className="w-full bg-transparent border-b-2 border-[var(--color-sand-dark)] focus:border-[var(--color-hh-pink)] font-body text-[var(--color-cream)] py-2 outline-none transition-colors mb-3"
           disabled={formData.stack.length >= 8}
+          maxLength={100}
         />
         <div className="flex flex-wrap gap-2">
           {STACK_SUGGESTIONS.filter(s => !formData.stack.includes(s)).slice(0, 8).map(suggestion => (
@@ -367,7 +368,7 @@ export default function Create() {
   );
 
   const canProceed = () => {
-    if (currentStep === 1) return formData.name.trim() && formData.email.trim() && formData.stack.length > 0;
+    if (currentStep === 1) return formData.name.trim() && formData.email.trim();
     if (currentStep === 2) return !!customization.croppedPhoto;
     return true;
   };
@@ -388,10 +389,8 @@ export default function Create() {
   return (
     <div ref={pageRef} className="min-h-screen lg:h-screen relative pt-24 lg:pt-20 pb-12 lg:pb-4 overflow-x-hidden lg:overflow-hidden bg-[var(--color-goa-green-deep)] flex flex-col justify-center">
       {/* Background layer */}
-      <div className="absolute inset-0 w-full h-full opacity-30 pointer-events-none mix-blend-overlay">
-         <img src={bgWithoutFooter} className="w-full h-full object-cover hidden lg:block" />
-         <img src={mobileBackground} className="w-full h-full object-fill block lg:hidden" />
-      </div>
+      <img src={bgWithoutFooter} alt="Background" className="absolute inset-0 w-full h-full object-fill z-0 hidden lg:block pointer-events-none" />
+      <img src={mobileBackground} alt="Background Mobile" className="absolute inset-0 w-full h-full object-fill z-0 block lg:hidden pointer-events-none" />
 
       <div className="max-w-[1400px] w-full mx-auto px-4 lg:px-8 relative z-10 flex flex-col lg:flex-row gap-6 lg:gap-12 items-center">
         

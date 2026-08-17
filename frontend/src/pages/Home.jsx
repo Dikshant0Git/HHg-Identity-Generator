@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Download, Eye } from 'lucide-react';
 import { usePageReveal } from '../hooks/useGsapAnimations';
-import mainHomeBg from '../assets/main-home-background.png';
-import mobileBackground from '../assets/mobile-background.png';
+import mainHomeBg from '../assets/simple-background.png';
+import mobileBackground from '../assets/simple-background.png';
 import imgHackerHouse from '../assets/imgi_3_Hacker house.png';
 import imgGoaHindi from '../assets/imgi_4_goa_hindi.png';
 

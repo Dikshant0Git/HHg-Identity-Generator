@@ -25,10 +25,11 @@ export const createParticipantSchema = z.object({
           .string()
           .trim()
           .min(1, { message: "Stack technology cannot be empty" })
-          .max(30, { message: "Stack item cannot exceed 30 characters" })
+          .max(100, { message: "Stack item cannot exceed 100 characters" })
       ),
       z.string().transform((val) => val.split(",").map((s) => s.trim())),
-    ]),
+    ])
+    .optional(),
 
   social: z.preprocess(
     (val) => {

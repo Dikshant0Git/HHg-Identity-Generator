@@ -44,11 +44,7 @@ const participantSchema = new mongoose.Schema(
 
     stack: {
       type: [String],
-      required: true,
-      validate: {
-        validator: (value) => Array.isArray(value) && value.length > 0,
-        message: "Stack must contain at least 1 technology",
-      },
+      default: [],
     },
 
     builderClass: {

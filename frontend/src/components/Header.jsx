@@ -8,7 +8,7 @@ export default function Header() {
 
   const NAV_LINKS = [
     { label: 'HOME', path: '/', isInternal: true },
-    { label: 'Create', path: '/create' },
+    { label: 'Create', path: '/create', isInternal: true },
     { label: 'FAQ', path: 'https://hhgoa.com', isInternal: false },
   ];
 

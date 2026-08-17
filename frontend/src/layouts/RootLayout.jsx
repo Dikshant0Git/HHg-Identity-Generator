@@ -19,7 +19,7 @@ export default function RootLayout() {
       <main className="flex-1 w-full h-full flex flex-col">
         <Outlet />
       </main>
-      {location.pathname !== '/' && <Footer />}
+      <Footer />
     </div>
   );
 }
